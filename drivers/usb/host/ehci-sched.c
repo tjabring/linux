@@ -1847,7 +1847,6 @@ static bool itd_complete(struct ehci_hcd *ehci, struct ehci_itd *itd)
 	unsigned				uframe;
 	int					urb_index = -1;
 	struct ehci_iso_stream			*stream = itd->stream;
-	struct usb_device			*dev;
 	bool					retval = false;
 
 	/* for each uframe with a packet */
@@ -1898,7 +1897,6 @@ static bool itd_complete(struct ehci_hcd *ehci, struct ehci_itd *itd)
 	 */
 
 	/* give urb back to the driver; completion often (re)submits */
-	dev = urb->dev;
 	ehci_urb_done(ehci, urb, 0);
 	retval = true;
 	urb = NULL;
@@ -2242,7 +2240,6 @@ static bool sitd_complete(struct ehci_hcd *ehci, struct ehci_sitd *sitd)
 	u32					t;
 	int					urb_index;
 	struct ehci_iso_stream			*stream = sitd->stream;
-	struct usb_device			*dev;
 	bool					retval = false;
 
 	urb_index = sitd->index;
@@ -2280,7 +2277,6 @@ static bool sitd_complete(struct ehci_hcd *ehci, struct ehci_sitd *sitd)
 	 */
 
 	/* give urb back to the driver; completion often (re)submits */
-	dev = urb->dev;
 	ehci_urb_done(ehci, urb, 0);
 	retval = true;
 	urb = NULL;
