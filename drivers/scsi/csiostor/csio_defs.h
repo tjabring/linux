@@ -35,6 +35,7 @@
 #ifndef __CSIO_DEFS_H__
 #define __CSIO_DEFS_H__
 
+#include <linux/io-64-nonatomic-lo-hi.h>
 #include <linux/kernel.h>
 #include <linux/stddef.h>
 #include <linux/timer.h>
@@ -49,19 +50,6 @@
 #define CSIO_VALID_WWN(__n)		((*__n >> 4) == 0x5 ? true : false)
 #define CSIO_DID_MASK			0xFFFFFF
 #define CSIO_WORD_TO_BYTE		4
-
-#ifndef readq
-static inline u64 readq(void __iomem *addr)
-{
-	return readl(addr) + ((u64)readl(addr + 4) << 32);
-}
-
-static inline void writeq(u64 val, void __iomem *addr)
-{
-	writel(val, addr);
-	writel(val >> 32, addr + 4);
-}
-#endif
 
 static inline int
 csio_list_deleted(struct list_head *list)
