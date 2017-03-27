@@ -29,6 +29,7 @@
 #ifndef _IXGBE_COMMON_H_
 #define _IXGBE_COMMON_H_
 
+#include <linux/io-64-nonatomic-lo-hi.h>
 #include "ixgbe_type.h"
 #include "ixgbe.h"
 
@@ -168,15 +169,6 @@ static inline void ixgbe_write_reg(struct ixgbe_hw *hw, u32 reg, u32 value)
 	writel(value, reg_addr + reg);
 }
 #define IXGBE_WRITE_REG(a, reg, value) ixgbe_write_reg((a), (reg), (value))
-
-#ifndef writeq
-#define writeq writeq
-static inline void writeq(u64 val, void __iomem *addr)
-{
-	writel((u32)val, addr);
-	writel((u32)(val >> 32), addr + 4);
-}
-#endif
 
 static inline void ixgbe_write_reg64(struct ixgbe_hw *hw, u32 reg, u64 value)
 {
