@@ -5,6 +5,7 @@
  * See LICENSE.qlcnic for copyright and licensing details.
  */
 
+#include <linux/io-64-nonatomic-lo-hi.h>
 #include <linux/slab.h>
 #include <net/ip.h>
 #include <linux/bitops.h>
@@ -32,21 +33,6 @@ struct qlcnic_ms_reg_ctrl {
 	u32 wd[4];
 	u64 off;
 };
-
-#ifndef readq
-static inline u64 readq(void __iomem *addr)
-{
-	return readl(addr) | (((u64) readl(addr + 4)) << 32LL);
-}
-#endif
-
-#ifndef writeq
-static inline void writeq(u64 val, void __iomem *addr)
-{
-	writel(((u32) (val)), (addr));
-	writel(((u32) (val >> 32)), (addr + 4));
-}
-#endif
 
 static struct crb_128M_2M_block_map
 crb_128M_2M_map[64] __cacheline_aligned_in_smp = {
