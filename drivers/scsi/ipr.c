@@ -68,6 +68,7 @@
 #include <linux/spinlock.h>
 #include <linux/sched.h>
 #include <linux/interrupt.h>
+#include <linux/io-64-nonatomic-lo-hi.h>
 #include <linux/blkdev.h>
 #include <linux/firmware.h>
 #include <linux/module.h>

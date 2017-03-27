@@ -1983,12 +1983,4 @@ static inline int ipr_sdt_is_fmt2(u32 sdt_word)
 	return 0;
 }
 
-#ifndef writeq
-static inline void writeq(u64 val, void __iomem *addr)
-{
-        writel(((u32) (val >> 32)), addr);
-        writel(((u32) (val)), (addr + 4));
-}
-#endif
-
 #endif /* _IPR_H */
