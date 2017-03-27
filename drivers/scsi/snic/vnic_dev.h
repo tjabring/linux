@@ -18,24 +18,12 @@
 #ifndef _VNIC_DEV_H_
 #define _VNIC_DEV_H_
 
+#include <linux/io-64-nonatomic-lo-hi.h>
 #include "vnic_resource.h"
 #include "vnic_devcmd.h"
 
 #ifndef VNIC_PADDR_TARGET
 #define VNIC_PADDR_TARGET	0x0000000000000000ULL
-#endif
-
-#ifndef readq
-static inline u64 readq(void __iomem *reg)
-{
-	return ((u64)readl(reg + 0x4UL) << 32) | (u64)readl(reg);
-}
-
-static inline void writeq(u64 val, void __iomem *reg)
-{
-	writel(lower_32_bits(val), reg);
-	writel(upper_32_bits(val), reg + 0x4UL);
-}
 #endif
 
 enum vnic_dev_intr_mode {
