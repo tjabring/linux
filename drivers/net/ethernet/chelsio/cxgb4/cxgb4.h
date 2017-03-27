@@ -40,6 +40,7 @@
 #include <linux/bitops.h>
 #include <linux/cache.h>
 #include <linux/interrupt.h>
+#include <linux/io-64-nonatomic-lo-hi.h>
 #include <linux/list.h>
 #include <linux/netdevice.h>
 #include <linux/pci.h>
@@ -1083,19 +1084,6 @@ static inline void t4_write_reg(struct adapter *adap, u32 reg_addr, u32 val)
 {
 	writel(val, adap->regs + reg_addr);
 }
-
-#ifndef readq
-static inline u64 readq(const volatile void __iomem *addr)
-{
-	return readl(addr) + ((u64)readl(addr + 4) << 32);
-}
-
-static inline void writeq(u64 val, volatile void __iomem *addr)
-{
-	writel(val, addr);
-	writel(val >> 32, addr + 4);
-}
-#endif
 
 static inline u64 t4_read_reg64(struct adapter *adap, u32 reg_addr)
 {

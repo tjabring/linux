@@ -40,6 +40,7 @@
 #ifndef __CXGB4VF_ADAPTER_H__
 #define __CXGB4VF_ADAPTER_H__
 
+#include <linux/io-64-nonatomic-lo-hi.h>
 #include <linux/interrupt.h>
 #include <linux/pci.h>
 #include <linux/spinlock.h>
@@ -439,19 +440,6 @@ static inline void t4_write_reg(struct adapter *adapter, u32 reg_addr, u32 val)
 {
 	writel(val, adapter->regs + reg_addr);
 }
-
-#ifndef readq
-static inline u64 readq(const volatile void __iomem *addr)
-{
-	return readl(addr) + ((u64)readl(addr + 4) << 32);
-}
-
-static inline void writeq(u64 val, volatile void __iomem *addr)
-{
-	writel(val, addr);
-	writel(val >> 32, addr + 4);
-}
-#endif
 
 /**
  * t4_read_reg64 - read a 64-bit HW register
