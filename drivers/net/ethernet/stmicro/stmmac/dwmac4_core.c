@@ -17,6 +17,7 @@
 #include <linux/slab.h>
 #include <linux/ethtool.h>
 #include <linux/io.h>
+#include "stmmac.h"
 #include "stmmac_pcs.h"
 #include "dwmac4.h"
 
@@ -729,20 +730,20 @@ static const struct stmmac_ops dwmac410_ops = {
 	.set_filter = dwmac4_set_filter,
 };
 
-struct mac_device_info *dwmac4_setup(void __iomem *ioaddr, int mcbins,
-				     int perfect_uc_entries, int *synopsys_id)
+struct mac_device_info *dwmac4_setup(struct stmmac_priv *priv)
 {
 	struct mac_device_info *mac;
-	u32 hwid = readl(ioaddr + GMAC_VERSION);
+	u32 hwid = readl(priv->ioaddr + GMAC_VERSION);
 
-	mac = kzalloc(sizeof(const struct mac_device_info), GFP_KERNEL);
+	mac = devm_kzalloc(priv->device, sizeof(struct mac_device_info), GFP_KERNEL);
 	if (!mac)
 		return NULL;
 
-	mac->pcsr = ioaddr;
-	mac->multicast_filter_bins = mcbins;
-	mac->unicast_filter_entries = perfect_uc_entries;
+	mac->pcsr = priv->ioaddr;
+	mac->multicast_filter_bins = priv->plat->multicast_filter_bins;
+	mac->unicast_filter_entries = priv->plat->unicast_filter_entries;
 	mac->mcast_bits_log2 = 0;
+	priv->dev->priv_flags |= IFF_UNICAST_FLT;
 
 	if (mac->multicast_filter_bins)
 		mac->mcast_bits_log2 = ilog2(mac->multicast_filter_bins);
@@ -760,17 +761,18 @@ struct mac_device_info *dwmac4_setup(void __iomem *ioaddr, int mcbins,
 	mac->mii.clk_csr_mask = GENMASK(11, 8);
 
 	/* Get and dump the chip ID */
-	*synopsys_id = stmmac_get_synopsys_id(hwid);
+	priv->synopsys_id = stmmac_get_synopsys_id(hwid);
 
-	if (*synopsys_id > DWMAC_CORE_4_00)
+	if (priv->synopsys_id > DWMAC_CORE_4_00)
 		mac->dma = &dwmac410_dma_ops;
 	else
 		mac->dma = &dwmac4_dma_ops;
 
-	if (*synopsys_id >= DWMAC_CORE_4_00)
+	if (priv->synopsys_id >= DWMAC_CORE_4_00)
 		mac->mac = &dwmac410_ops;
 	else
 		mac->mac = &dwmac4_ops;
 
 	return mac;
 }
+EXPORT_SYMBOL_GPL(dwmac4_setup);

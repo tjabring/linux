@@ -3531,12 +3531,6 @@ static int stmmac_hw_init(struct stmmac_priv *priv)
 	/* Identify the MAC HW device */
 	if (priv->plat->setup) {
 		mac = priv->plat->setup(priv);
-	} else if (priv->plat->has_gmac4) {
-		priv->dev->priv_flags |= IFF_UNICAST_FLT;
-		mac = dwmac4_setup(priv->ioaddr,
-				   priv->plat->multicast_filter_bins,
-				   priv->plat->unicast_filter_entries,
-				   &priv->synopsys_id);
 	} else {
 		mac = dwmac100_setup(priv->ioaddr, &priv->synopsys_id);
 	}
