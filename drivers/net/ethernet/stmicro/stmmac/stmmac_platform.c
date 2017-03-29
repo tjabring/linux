@@ -447,6 +447,7 @@ stmmac_probe_config_dt(struct platform_device *pdev, const char **mac)
 		plat->multicast_filter_bins = dwmac1000_validate_mcast_bins(
 					      plat->multicast_filter_bins);
 		plat->has_gmac = 1;
+		plat->setup = dwmac1000_setup;
 		plat->pmt = 1;
 	}
 

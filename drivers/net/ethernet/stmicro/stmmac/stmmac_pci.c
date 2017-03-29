@@ -71,6 +71,7 @@ static void stmmac_default_data(struct plat_stmmacenet_data *plat)
 	plat->interface = PHY_INTERFACE_MODE_GMII;
 	plat->clk_csr = 2;	/* clk_csr_i = 20-35MHz & MDC = clk_csr_i/16 */
 	plat->has_gmac = 1;
+	plat->setup = dwmac1000_setup;
 	plat->force_sf_dma_mode = 1;
 
 	plat->mdio_bus_data->phy_reset = NULL;
@@ -120,6 +121,7 @@ static int quark_default_data(struct plat_stmmacenet_data *plat,
 	plat->interface = PHY_INTERFACE_MODE_RMII;
 	plat->clk_csr = 2;
 	plat->has_gmac = 1;
+	plat->setup = dwmac1000_setup;
 	plat->force_sf_dma_mode = 1;
 
 	plat->mdio_bus_data->phy_reset = NULL;

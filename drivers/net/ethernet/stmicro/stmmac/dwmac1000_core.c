@@ -26,6 +26,7 @@
 #include <linux/slab.h>
 #include <linux/ethtool.h>
 #include <asm/io.h>
+#include "stmmac.h"
 #include "stmmac_pcs.h"
 #include "dwmac1000.h"
 
@@ -509,21 +510,21 @@ static const struct stmmac_ops dwmac1000_ops = {
 	.pcs_get_adv_lp = dwmac1000_get_adv_lp,
 };
 
-struct mac_device_info *dwmac1000_setup(void __iomem *ioaddr, int mcbins,
-					int perfect_uc_entries,
-					int *synopsys_id)
+struct mac_device_info *dwmac1000_setup(struct stmmac_priv *priv)
 {
 	struct mac_device_info *mac;
-	u32 hwid = readl(ioaddr + GMAC_VERSION);
+	u32 hwid = readl(priv->ioaddr + GMAC_VERSION);
 
-	mac = kzalloc(sizeof(const struct mac_device_info), GFP_KERNEL);
+	mac = devm_kzalloc(priv->device, sizeof(struct mac_device_info),
+			   GFP_KERNEL);
 	if (!mac)
 		return NULL;
 
-	mac->pcsr = ioaddr;
-	mac->multicast_filter_bins = mcbins;
-	mac->unicast_filter_entries = perfect_uc_entries;
+	mac->pcsr = priv->ioaddr;
+	mac->multicast_filter_bins = priv->plat->multicast_filter_bins;
+	mac->unicast_filter_entries = priv->plat->unicast_filter_entries;
 	mac->mcast_bits_log2 = 0;
+	priv->dev->priv_flags |= IFF_UNICAST_FLT;
 
 	if (mac->multicast_filter_bins)
 		mac->mcast_bits_log2 = ilog2(mac->multicast_filter_bins);
@@ -544,7 +545,8 @@ struct mac_device_info *dwmac1000_setup(void __iomem *ioaddr, int mcbins,
 	mac->mii.clk_csr_mask = GENMASK(5, 2);
 
 	/* Get and dump the chip ID */
-	*synopsys_id = stmmac_get_synopsys_id(hwid);
+	priv->synopsys_id = stmmac_get_synopsys_id(hwid);
 
 	return mac;
 }
+EXPORT_SYMBOL_GPL(dwmac1000_setup);

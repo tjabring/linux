@@ -347,6 +347,7 @@ static int ipq806x_gmac_probe(struct platform_device *pdev)
 	}
 
 	plat_dat->has_gmac = true;
+	plat_dat->setup = dwmac1000_setup;
 	plat_dat->bsp_priv = gmac;
 	plat_dat->fix_mac_speed = ipq806x_gmac_fix_mac_speed;
 
