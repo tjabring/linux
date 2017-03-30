@@ -77,6 +77,7 @@ static int meson6_dwmac_probe(struct platform_device *pdev)
 	}
 
 	plat_dat->bsp_priv = dwmac;
+	plat_dat->setup = dwmac100_setup;
 	plat_dat->fix_mac_speed = meson6_dwmac_fix_mac_speed;
 
 	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);

@@ -343,6 +343,7 @@ static int sti_dwmac_probe(struct platform_device *pdev)
 	dwmac->fix_retime_src = data->fix_retime_src;
 
 	plat_dat->bsp_priv = dwmac;
+	plat_dat->setup = dwmac100_setup;
 	plat_dat->fix_mac_speed = data->fix_retime_src;
 
 	ret = clk_prepare_enable(dwmac->clk);

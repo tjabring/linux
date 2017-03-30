@@ -136,6 +136,7 @@ static int oxnas_dwmac_probe(struct platform_device *pdev)
 
 	dwmac->dev = &pdev->dev;
 	plat_dat->bsp_priv = dwmac;
+	plat_dat->setup = dwmac100_setup;
 	plat_dat->init = oxnas_dwmac_init;
 	plat_dat->exit = oxnas_dwmac_exit;
 

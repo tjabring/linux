@@ -303,6 +303,7 @@ static int meson8b_dwmac_probe(struct platform_device *pdev)
 		goto err_remove_config_dt;
 
 	plat_dat->bsp_priv = dwmac;
+	plat_dat->setup = dwmac100_setup;
 
 	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
 	if (ret)

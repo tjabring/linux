@@ -3529,11 +3529,7 @@ static int stmmac_hw_init(struct stmmac_priv *priv)
 	struct mac_device_info *mac;
 
 	/* Identify the MAC HW device */
-	if (priv->plat->setup) {
-		mac = priv->plat->setup(priv);
-	} else {
-		mac = dwmac100_setup(priv->ioaddr, &priv->synopsys_id);
-	}
+	mac = priv->plat->setup(priv);
 	if (!mac)
 		return -ENOMEM;
 

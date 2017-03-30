@@ -601,7 +601,7 @@ struct stmmac_rx_routing {
 };
 
 struct mac_device_info *dwmac1000_setup(struct stmmac_priv *priv);
-struct mac_device_info *dwmac100_setup(void __iomem *ioaddr, int *synopsys_id);
+struct mac_device_info *dwmac100_setup(struct stmmac_priv *priv);
 struct mac_device_info *dwmac4_setup(struct stmmac_priv *priv);
 
 void stmmac_set_mac_addr(void __iomem *ioaddr, u8 addr[6],

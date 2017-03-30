@@ -57,6 +57,8 @@ static int dwmac_generic_probe(struct platform_device *pdev)
 	if (ret)
 		goto err_exit;
 
+	plat_dat->setup = dwmac100_setup;
+
 	return 0;
 
 err_exit:

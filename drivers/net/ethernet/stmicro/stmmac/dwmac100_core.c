@@ -27,6 +27,7 @@
 #include <linux/crc32.h>
 #include <asm/io.h>
 #include "dwmac100.h"
+#include "stmmac.h"
 
 static void dwmac100_core_init(struct mac_device_info *hw, int mtu)
 {
@@ -161,17 +162,17 @@ static const struct stmmac_ops dwmac100_ops = {
 	.get_umac_addr = dwmac100_get_umac_addr,
 };
 
-struct mac_device_info *dwmac100_setup(void __iomem *ioaddr, int *synopsys_id)
+struct mac_device_info *dwmac100_setup(struct stmmac_priv *priv)
 {
 	struct mac_device_info *mac;
 
-	mac = kzalloc(sizeof(const struct mac_device_info), GFP_KERNEL);
+	mac = devm_kzalloc(priv->device, sizeof(struct mac_device_info), GFP_KERNEL);
 	if (!mac)
 		return NULL;
 
 	pr_info("\tDWMAC100\n");
 
-	mac->pcsr = ioaddr;
+	mac->pcsr = priv->ioaddr;
 	mac->mac = &dwmac100_ops;
 	mac->dma = &dwmac100_dma_ops;
 
@@ -188,7 +189,8 @@ struct mac_device_info *dwmac100_setup(void __iomem *ioaddr, int *synopsys_id)
 	mac->mii.clk_csr_mask = GENMASK(5, 2);
 
 	/* Synopsys Id is not available on old chips */
-	*synopsys_id = 0;
+	priv->synopsys_id = 0;
 
 	return mac;
 }
+EXPORT_SYMBOL_GPL(dwmac100_setup);

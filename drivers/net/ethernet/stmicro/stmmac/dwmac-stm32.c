@@ -119,6 +119,7 @@ static int stm32_dwmac_probe(struct platform_device *pdev)
 	}
 
 	plat_dat->bsp_priv = dwmac;
+	plat_dat->setup = dwmac100_setup;
 
 	ret = stm32_dwmac_init(plat_dat);
 	if (ret)
